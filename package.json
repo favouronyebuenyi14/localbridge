@@ -1,0 +1,19 @@
+{
+  "name": "localbridge",
+  "version": "1.0.0",
+  "description": "LocalBridge — secure intent router for local AI agents",
+  "main": "src/index.js",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch src/index.js",
+    "start": "node src/index.js"
+  },
+  "dependencies": {
+    "@auth0/nextjs-auth0": "^4.0.0",
+    "dotenv": "^16.6.1",
+    "express": "^4.22.1",
+    "express-openid-connect": "^2.19.4",
+    "express-session": "^1.19.0",
+    "node-fetch": "^3.3.2"
+  }
+}
