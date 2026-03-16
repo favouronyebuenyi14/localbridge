@@ -35,7 +35,6 @@ app.get('/health', (req, res) => {
 });
 
 // Auth callback is handled automatically by express-openid-connect at /callback
-
 // Trigger Google connected account flow
 // Visit this in browser to link your Google account to Token Vault
 app.get('/connect/google', requireAuth, (req, res) => {
@@ -73,6 +72,17 @@ app.get('/connect/github', requireAuth, (req, res) => {
 // Profile — see current session and connected accounts
 app.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.oidc.user });
+});
+
+// Browser test endpoint — tests Token Vault without needing HMAC from terminal
+app.get('/test/emails', requireAuth, async (req, res) => {
+  const { commsAgent } = await import('./agents/commsAgent.js');
+  try {
+    const result = await commsAgent(req, { action: 'read_emails', params: { maxResults: 5 } });
+    res.json(result);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 // Main intent endpoint — receives signed intents from the local model
