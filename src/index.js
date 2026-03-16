@@ -16,7 +16,7 @@ app.use(
     authRequired: false,         // Only force login on protected routes
     auth0Logout: true,
     secret: process.env.AUTH0_SECRET,
-    baseURL: process.env.AUTH0_BASE_URL || 'https://localbridge.onrender.com',
+    baseURL: 'https://localbridge.onrender.com',
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
