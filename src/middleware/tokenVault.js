@@ -1,22 +1,27 @@
 import { ApiClient } from '@auth0/auth0-api-js';
 
-const apiClient = new ApiClient({
-  domain: process.env.AUTH0_DOMAIN,
-  clientId: process.env.AUTH0_CLIENT_ID,
-  clientSecret: process.env.AUTH0_CLIENT_SECRET,
-});
-
 export async function getTokenForConnection(req, connection) {
-  const accessToken = req.oidc.accessToken?.access_token;
+  const domain = process.env.AUTH0_DOMAIN;
+  const clientId = process.env.AUTH0_CLIENT_ID;
+  const clientSecret = process.env.AUTH0_CLIENT_SECRET;
+
+  const accessToken = req.oidc?.accessToken?.access_token;
 
   if (!accessToken) {
-    throw new Error('No access token in session. User may need to log in again.');
+    throw new Error('No access token in session. User needs to log in again.');
   }
 
-  const tokenSet = await apiClient.getAccessTokenForConnection({
+  const apiClient = new ApiClient({
+    domain: domain,
+    audience: `https://${domain}/api/v2/`,
+    clientId: clientId,
+    clientSecret: clientSecret,
+  });
+
+  const result = await apiClient.getAccessTokenForConnection({
     connection: connection,
     accessToken: accessToken,
   });
 
-  return tokenSet.access_token;
+  return result.access_token;
 }

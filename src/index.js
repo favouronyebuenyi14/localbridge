@@ -20,10 +20,11 @@ app.use(
     clientID: process.env.AUTH0_CLIENT_ID,
     clientSecret: process.env.AUTH0_CLIENT_SECRET,
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
-    authorizationParams: {
-      response_type: 'code',
-      scope: 'openid profile email offline_access read:me:connected_accounts',
-    },
+  authorizationParams: {
+  response_type: 'code',
+  scope: 'openid profile email offline_access read:me:connected_accounts',
+  audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+},
   })
 );
 
