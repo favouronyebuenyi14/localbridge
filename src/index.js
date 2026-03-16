@@ -75,6 +75,18 @@ app.get('/me', requireAuth, (req, res) => {
   res.json({ user: req.oidc.user });
 });
 
+app.get('/debug', requireAuth, (req, res) => {
+  res.json({
+    isAuthenticated: req.oidc.isAuthenticated(),
+    hasAccessToken: !!req.oidc?.accessToken,
+    accessTokenType: typeof req.oidc?.accessToken,
+    accessTokenKeys: req.oidc?.accessToken ? Object.keys(req.oidc.accessToken) : [],
+    hasRefreshToken: !!req.oidc?.refreshToken,
+    user: req.oidc?.user,
+    idTokenClaims: req.oidc?.idTokenClaims,
+  });
+});
+
 // Browser test endpoint — tests Token Vault without needing HMAC from terminal
 app.get('/test/emails', requireAuth, async (req, res) => {
   try {
