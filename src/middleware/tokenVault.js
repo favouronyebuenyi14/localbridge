@@ -14,10 +14,15 @@ export async function getTokenForConnection(req, connection) {
     throw new Error('No access token in session. Visit /connect/google to log in again.');
   }
 
-  const tokenSet = await apiClient.getAccessTokenForConnection({
-    connection: connection,
-    accessToken: accessToken,
-  });
-
-  return tokenSet.access_token;
-}
+ try {
+    const tokenSet = await apiClient.getAccessTokenForConnection({
+      connection: connection,
+      accessToken: accessToken,
+    });
+    return tokenSet.access_token;
+  } catch (err) {
+    console.error('Token Vault full error:', JSON.stringify(err, null, 2));
+    console.error('Token Vault message:', err.message);
+    console.error('Access token used:', accessToken?.substring(0, 20) + '...');
+    throw err;
+  }
