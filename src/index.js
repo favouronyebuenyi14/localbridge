@@ -77,12 +77,15 @@ app.get('/me', requireAuth, (req, res) => {
 
 // Browser test endpoint — tests Token Vault without needing HMAC from terminal
 app.get('/test/emails', requireAuth, async (req, res) => {
-  const { commsAgent } = await import('./agents/commsAgent.js');
   try {
+    console.log('Access token:', JSON.stringify(req.oidc?.accessToken));
+    console.log('Refresh token:', req.oidc?.refreshToken ? 'exists' : 'missing');
+    const { commsAgent } = await import('./agents/commsAgent.js');
     const result = await commsAgent(req, { action: 'read_emails', params: { maxResults: 5 } });
     res.json(result);
   } catch (err) {
-    res.status(500).json({ error: err.message });
+    console.error('FULL ERROR:', err);
+    res.status(500).json({ error: err.message, stack: err.stack });
   }
 });
 
