@@ -30,15 +30,14 @@ export async function getTokenForConnection(req, connection) {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
-      client_id: clientId,
-      client_secret: clientSecret,
-      subject_token: refreshToken,
-      subject_token_type: 'urn:ietf:params:oauth:token-type:refresh_token',
-      requested_token_type: 'http://auth0.com/oauth/token-type/federated-connection-access-token',
-      connection: connection,
-    }),
-  });
+  grant_type: 'urn:ietf:params:oauth:grant-type:token-exchange',
+  client_id: clientId,
+  client_secret: clientSecret,
+  subject_token: refreshToken,
+  subject_token_type: 'urn:ietf:params:oauth:token-type:refresh_token',
+  requested_token_type: 'urn:auth0:params:oauth:token-type:connection_access_token',
+  connection: connection,
+}),
 
   if (!response.ok) {
     const error = await response.json();
