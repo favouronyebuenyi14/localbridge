@@ -39,12 +39,12 @@ app.get('/health', (req, res) => {
 // Trigger Google connected account flow
 // Visit this in browser to link your Google account to Token Vault
 app.get('/connect/google', requireAuth, (req, res) => {
-  const returnTo = encodeURIComponent(`${process.env.AUTH0_BASE_URL}/connect/google/done`);
+  const returnTo = encodeURIComponent('https://localbridge.onrender.com/connect/google/done');
   res.redirect(
     `https://${process.env.AUTH0_DOMAIN}/authorize?` +
     `client_id=${process.env.AUTH0_CLIENT_ID}` +
     `&response_type=code` +
-    `&redirect_uri=${encodeURIComponent(process.env.AUTH0_BASE_URL + '/callback')}` +
+    `&redirect_uri=${encodeURIComponent('https://localbridge.onrender.com/callback')}` +
     `&scope=openid%20profile%20email%20offline_access` +
     `&connection=google-oauth2` +
     `&access_type=offline` +
@@ -63,7 +63,7 @@ app.get('/connect/github', requireAuth, (req, res) => {
     `https://${process.env.AUTH0_DOMAIN}/authorize?` +
     `client_id=${process.env.AUTH0_CLIENT_ID}` +
     `&response_type=code` +
-    `&redirect_uri=${encodeURIComponent(process.env.AUTH0_BASE_URL + '/callback')}` +
+    `&redirect_uri=${encodeURIComponent('https://localbridge.onrender.com/callback')}` +
     `&scope=openid%20profile%20email%20offline_access` +
     `&connection=github` +
     `&prompt=consent`
