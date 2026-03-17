@@ -7,7 +7,7 @@ import { requireAuth } from './middleware/requireAuth.js';
 const app = express();
 app.use(express.json());
 
-const BASE_URL = 'https://localbridge.onrender.com';
+const BASE_URL = process.env.AUTH0_BASE_URL;
 
 app.use(
   auth({
@@ -20,10 +20,10 @@ app.use(
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
     authorizationParams: {
       response_type: 'code',
-      scope: 'openid profile email offline_access', // Request offline access
-      prompt: 'consent',                             // Force the consent screen
-      access_type: 'offline',                        // Required by Google for Refresh Tokens
-      connection: 'google-oauth2' 
+      scope: 'openid profile email offline_access read:me:connected_accounts https://mail.google.com/ https://www.googleapis.com/auth/calendar',
+      prompt: 'consent',
+      access_type: 'offline',
+      connection: 'google-oauth2',
     },
   })
 );
@@ -45,6 +45,22 @@ app.get('/debug', requireAuth, (req, res) => {
     sub: req.oidc?.user?.sub,
     email: req.oidc?.user?.email,
   });
+});
+
+app.get('/link-google', requireAuth, (req, res) => {
+  const audience = `https://${process.env.AUTH0_DOMAIN}/api/v2/`;
+  const scope = 'linked_to:google-oauth2 https://mail.google.com/ https://www.googleapis.com/auth/calendar';
+  res.redirect(
+    `https://${process.env.AUTH0_DOMAIN}/authorize?` +
+    `client_id=${process.env.AUTH0_CLIENT_ID}` +
+    `&response_type=code` +
+    `&redirect_uri=${encodeURIComponent('http://localhost:3000/callback')}` +
+    `&scope=${encodeURIComponent(scope)}` +
+    `&audience=${encodeURIComponent(audience)}` +
+    `&connection=google-oauth2` +
+    `&prompt=consent` +
+    `&access_type=offline`
+  );
 });
 
 app.get('/test/emails', requireAuth, async (req, res) => {
