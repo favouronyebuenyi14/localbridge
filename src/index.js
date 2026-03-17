@@ -20,10 +20,10 @@ app.use(
     issuerBaseURL: `https://${process.env.AUTH0_DOMAIN}`,
     authorizationParams: {
       response_type: 'code',
-      scope: 'openid profile email offline_access',
-      connection: 'google-oauth2',
-      access_type: 'offline',
-      prompt: 'consent',
+      scope: 'openid profile email offline_access', // Request offline access
+      prompt: 'consent',                             // Force the consent screen
+      access_type: 'offline',                        // Required by Google for Refresh Tokens
+      connection: 'google-oauth2' 
     },
   })
 );
